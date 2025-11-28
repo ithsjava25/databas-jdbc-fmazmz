@@ -1,7 +1,9 @@
 package com.example.domain.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 public record PasswordUpdateRequest(
-        Short userId,
-        String password
+        @NotNull Integer userId,
+        @NotNull String password
 ) {
 }

@@ -10,7 +10,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Short userId;
+    private Integer userId;
 
     @Column(name = "name")
     private String name;
@@ -47,7 +47,7 @@ public class User {
         return capitalize(p1) + capitalize(p2);
     }
 
-    public Short getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

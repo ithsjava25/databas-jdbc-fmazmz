@@ -73,8 +73,6 @@ public class Main {
 
         boolean running = true;
 
-        User USER = loginUser.get();
-
         while (running) {
             System.out.println("-----------------------------------");
             System.out.println("1) List moon missions");
