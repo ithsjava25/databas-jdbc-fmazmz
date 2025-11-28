@@ -5,6 +5,7 @@ import com.example.domain.dto.UserDTOMapper;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Console;
 import java.sql.Connection;
@@ -44,7 +45,6 @@ public class Main {
         //Todo: Starting point for your code
         AnnotationConfigApplicationContext ctx =
                 new AnnotationConfigApplicationContext(AppConfig.class);
-
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         MissionService missionService = ctx.getBean(MissionService.class);
 
@@ -134,7 +134,7 @@ public class Main {
 
                 case "5" -> {
                     System.out.print("User id: ");
-                    Short id = Short.valueOf(scanner.nextLine());
+                    Integer id = valueOf(scanner.nextLine());
 
                     System.out.print("New password: ");
                     String newPassword = scanner.nextLine();
@@ -153,7 +153,7 @@ public class Main {
 
                 case "6" -> {
                     System.out.print("User id: ");
-                    Short id = Short.valueOf(scanner.nextLine());
+                    Integer id = valueOf(scanner.nextLine());
 
                     if (userRepo.existsById(id)) {
                         userRepo.deleteById(id);

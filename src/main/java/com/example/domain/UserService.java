@@ -31,7 +31,7 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public void deleteUser(Short userId) {
+    public void deleteUser(Integer userId) {
         Optional<User> user = userRepo.findById(userId);
         if (user.isEmpty()) {
             System.out.println("User not found");
