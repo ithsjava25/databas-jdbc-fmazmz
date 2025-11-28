@@ -38,11 +38,11 @@ public class User {
 
 
     public static String makeUserName(User user) {
-        String firstName = user.getFirstName();
-        String lastName = user.getLastName();
+        String first = user.getFirstName() == null ? "" : user.getFirstName().trim();
+        String last  = user.getLastName()  == null ? "" : user.getLastName().trim();
 
-        String p1 = firstName.substring(0, 3);
-        String p2 = lastName.substring(0, 3);
+        String p1 = first.length() >= 3 ? first.substring(0, 3) : first;
+        String p2 = last.length()  >= 3 ? last.substring(0, 3)  : last;
 
         return capitalize(p1) + capitalize(p2);
     }
