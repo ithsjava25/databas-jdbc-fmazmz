@@ -133,7 +133,8 @@ public class Main {
                 }
 
                 case "5" -> {
-                    Short id = USER.getUserId();
+                    System.out.print("User id: ");
+                    Short id = Short.valueOf(scanner.nextLine());
 
                     System.out.print("New password: ");
                     String newPassword = scanner.nextLine();
