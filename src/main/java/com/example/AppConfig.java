@@ -1,12 +1,16 @@
 package com.example;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.sql.DataSource;
 
 @Configuration
+@EnableJpaRepositories(basePackages = "com.example.domain.repository")
+@EntityScan(basePackages = "com.example.domain.model")
 public class AppConfig {
 
     @Bean

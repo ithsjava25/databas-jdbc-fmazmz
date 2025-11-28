@@ -1,5 +1,6 @@
-package com.example.domain;
+package com.example.domain.repository;
 
+import com.example.domain.model.MoonMission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
