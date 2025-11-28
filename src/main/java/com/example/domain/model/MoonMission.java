@@ -93,4 +93,16 @@ public class MoonMission {
         this.outcome = outcome;
     }
 
+    @Override
+    public String toString() {
+        return "MoonMission{" +
+                "id=" + id +
+                ", spacecraft='" + spacecraft + '\'' +
+                ", launchDate=" + launchDate +
+                ", carrierRocket='" + carrierRocket + '\'' +
+                ", operator='" + operator + '\'' +
+                ", missionType='" + missionType + '\'' +
+                ", outcome='" + outcome + '\'' +
+                '}';
+    }
 }

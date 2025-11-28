@@ -1,18 +1,13 @@
 package com.example;
 
-import com.example.domain.dto.UserDTO;
 import com.example.domain.dto.UserDTOMapper;
-import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -44,16 +39,14 @@ public class Main {
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
         UserRepository userRepo = ctx.getBean(UserRepository.class);
+        UserDTOMapper mapper = ctx.getBean(UserDTOMapper.class);
+        //List<UserDTO> list =
+        //        userRepo.findById((short) 1)
+        //                .stream()
+        //                .map(mapper)
+        //                .toList();
 
-        UserDTOMapper mapper = new UserDTOMapper();
-
-        List<UserDTO> list =
-                userRepo.findById((short) 1)
-                        .stream()
-                        .map(mapper)
-                        .toList();
-
-        System.out.println(list);
+        //System.out.println(list);
     }
 
     /**
