@@ -8,7 +8,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private short userId;
 
     @Column(name = "name")
     private String name;
@@ -27,8 +27,7 @@ public class User {
 
 
     public User() {}
-    public User(int userId, String name, String password, String firstName, String lastName, String ssn) {
-        this.userId = userId;
+    public User(String name, String password, String firstName, String lastName, String ssn) {
         this.name = name;
         this.password = password;
         this.firstName = firstName;
@@ -36,7 +35,7 @@ public class User {
         this.ssn = ssn;
     }
 
-    public int getUserId() {
+    public short getUserId() {
         return userId;
     }
 
@@ -58,5 +57,25 @@ public class User {
 
     public String getSsn() {
         return ssn;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
 }
