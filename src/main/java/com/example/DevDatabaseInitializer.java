@@ -13,7 +13,7 @@ public class DevDatabaseInitializer {
                     .withUsername("user")
                     .withPassword("password")
                     .withConfigurationOverride("myconfig")
-                    .withInitScript("init.sql");
+                    .withInitScript("init_postgres.sql");
             mysql.start();
 
             System.setProperty("APP_JDBC_URL", mysql.getJdbcUrl());

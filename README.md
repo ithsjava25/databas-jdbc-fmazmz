@@ -5,7 +5,7 @@ This project ships with an end‑to‑end CLI integration test suite that uses T
 Because Testcontainers needs a container runtime, you must have Docker running on your machine to execute the tests.
 
 - What the tests do
-  - Start a throwaway MySQL container using the configuration in `src/main/resources/myconfig` and seed data from `src/main/resources/init.sql`.
+  - Start a throwaway MySQL container using the configuration in `src/main/resources/myconfig` and seed data from `src/main/resources/init_postgres.sql`.
   - Set the following Java system properties so the application can connect to that database:
     - `APP_JDBC_URL`
     - `APP_DB_USER`
@@ -102,7 +102,7 @@ G (base level)
   - Use the DB settings provided via `APP_JDBC_URL`, `APP_DB_USER`, `APP_DB_PASS` (already resolved in `Main`).
 
 Notes
-- Seed data in `init.sql` includes a known account used by the tests (e.g., username `AngFra`, password `MB=V4cbAqPz4vqmQ`).
+- Seed data in `init_postgres.sql` includes a known account used by the tests (e.g., username `AngFra`, password `MB=V4cbAqPz4vqmQ`).
 - The tests are ordered to run login checks first and then the other menu actions.
 
 ---
