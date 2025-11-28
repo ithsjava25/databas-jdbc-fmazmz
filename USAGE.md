@@ -31,8 +31,8 @@ Then run:
 ```bash
 java \
 -DAPP_JDBC_URL=jdbc:postgresql://localhost:5432/moondb \
--DAPP_DB_USER=postgres \
--DAPP_DB_PASS=postgres \
+-DAPP_DB_USER=root \
+-DAPP_DB_PASS=root \
 -jar target/jdbc-1.0-SNAPSHOT.jar
 ```
 
