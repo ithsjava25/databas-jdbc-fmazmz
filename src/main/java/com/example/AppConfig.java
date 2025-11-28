@@ -42,8 +42,14 @@ public class AppConfig {
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Map<String, Object> props = new HashMap<>();
-        props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        props.put("hibernate.hbm2ddl.auto", "none");
+        // Dialect selection based on JDBC URL
+        String url = ds instanceof HikariDataSource h ? h.getJdbcUrl() : "";
+
+        if (url.contains("postgresql")) {
+            props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        } else if (url.contains("mysql")) {
+            props.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        }
 
         emf.setJpaPropertyMap(props);
         return emf;
