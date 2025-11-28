@@ -61,6 +61,11 @@ public class Main {
 
         if (loginUser.isEmpty()) {
             System.out.println("Invalid username or password");
+            System.out.println("Press 0 to exit...");
+            String input = scanner.nextLine();
+            if (input.equals("0")) {
+                return;
+            }
             return;
         }
 
