@@ -2,6 +2,8 @@ package com.example.domain.model;
 
 import jakarta.persistence.*;
 
+import static org.springframework.util.StringUtils.capitalize;
+
 @Entity
 @Table(name = "account")
 public class User {
@@ -32,6 +34,17 @@ public class User {
         this.lastName = lastName;
         this.ssn = ssn;
         this.password = password;
+    }
+
+
+    public static String makeUserName(User user) {
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+
+        String p1 = firstName.substring(0, 3);
+        String p2 = lastName.substring(0, 3);
+
+        return capitalize(p1) + capitalize(p2);
     }
 
     public Short getUserId() {
