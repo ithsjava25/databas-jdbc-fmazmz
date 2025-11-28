@@ -4,6 +4,7 @@ import com.example.domain.dto.PasswordUpdateRequest;
 import com.example.domain.dto.UserCreationRequest;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class UserService {
         userRepo.delete(user.get());
     }
 
+    @Transactional
     public void updateUserPassword(PasswordUpdateRequest req) {
         Optional<User> user = userRepo.findById(req.userId());
         if (user.isEmpty()) {
@@ -47,5 +49,6 @@ public class UserService {
             return;
         }
         user.get().setPassword(req.password());
+        userRepo.save(user.get());
     }
 }
