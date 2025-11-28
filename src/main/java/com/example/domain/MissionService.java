@@ -1,5 +1,7 @@
 package com.example.domain;
 
+import com.example.domain.dto.MoonMissionDTO;
+import com.example.domain.dto.MoonMissionDTOMapper;
 import com.example.domain.model.MoonMission;
 import com.example.domain.repository.MissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,12 @@ import java.util.stream.Collectors;
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final MoonMissionDTOMapper moonMissionDTOMapper;
 
     @Autowired
-    public MissionService(MissionRepository missionRepository) {
+    public MissionService(MissionRepository missionRepository,  MoonMissionDTOMapper moonMissionDTOMapper) {
         this.missionRepository = missionRepository;
+        this.moonMissionDTOMapper = moonMissionDTOMapper;
     }
 
     public List<String> getAllMissionNames() {
@@ -25,8 +29,8 @@ public class MissionService {
                 .toList();
     }
 
-    public Optional<MoonMission> getMissionById(Integer id) {
-        return missionRepository.findById(id);
+    public Optional<MoonMissionDTO> getMissionById(Integer id) {
+        return missionRepository.findById(id).map(moonMissionDTOMapper);
     }
 
     public long totalMissionsByYear(int year) {
