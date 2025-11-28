@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
+import static java.lang.Integer.valueOf;
+
 public class Main {
 
     static void main(String[] args) {
@@ -96,7 +98,7 @@ public class Main {
 
                 case "2" -> {
                     System.out.print("Mission id: ");
-                    Short id = Short.valueOf(scanner.nextLine());
+                    Integer id = valueOf(scanner.nextLine());
                     missionService.getMissionById(id)
                             .ifPresentOrElse(
                                     mission -> System.out.println("Mission: " + mission),
