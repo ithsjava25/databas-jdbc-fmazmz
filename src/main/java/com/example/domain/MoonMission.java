@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class MoonMission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mission_id", nullable = false)
+    @Column(name = "mission_id")
     private Short id;
 
     @Column(name = "spacecraft")
