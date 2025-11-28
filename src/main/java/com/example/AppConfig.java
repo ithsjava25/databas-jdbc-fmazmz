@@ -28,6 +28,17 @@ public class AppConfig {
         String user = System.getProperty("APP_DB_USER");
         String pass =  System.getProperty("APP_DB_PASS");
 
+        if(url == null || url.isBlank()) {
+            throw new IllegalStateException("APP_JDBC_URL must be set");
+        }
+        if(user == null || user.isBlank()) {
+            throw new IllegalStateException("APP_DB_USER must be set");
+        }
+        if(pass == null || pass.isBlank()) {
+            throw new IllegalStateException("APP_DB_PASS must be set");
+        }
+
+
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(url);
         dataSource.setUsername(user);
