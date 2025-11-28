@@ -94,18 +94,40 @@ public class Main {
             switch (choice) {
 
                 case "1" -> {
-                    missionService.getAllMissionNames()
-                            .forEach(System.out::println);
+                    var missions = missionService.getAllMissions();
+
+                    System.out.println();
+                    System.out.println("==============================================");
+                    System.out.printf("%-20s %-6s %-10s%n", "Spacecraft", "Year", "Outcome");
+                    System.out.println("==============================================");
+
+                    missions.forEach(m -> {
+                        System.out.printf(
+                                "%-20s %-6d %-10s%n",
+                                m.spacecraft(),
+                                m.launchDate().getYear(),
+                                m.outcome()
+                        );
+                    });
+
+                    System.out.println("==============================================");
+                    System.out.println();
                 }
 
                 case "2" -> {
                     System.out.print("Mission id: ");
                     Integer id = valueOf(scanner.nextLine());
                     missionService.getMissionById(id)
-                            .ifPresentOrElse(
-                                    mission -> System.out.println("Mission: " + mission),
-                                    () -> System.out.println("Mission not found")
-                            );
+                            .ifPresentOrElse(m -> {
+                                System.out.println("\n=== Mission Details ===");
+                                System.out.println("Spacecraft:   " + m.spacecraft());
+                                System.out.println("Launch date:  " + m.launchDate());
+                                System.out.println("Rocket:       " + m.carrierRocket());
+                                System.out.println("Operator:     " + m.operator());
+                                System.out.println("Type:         " + m.missionType());
+                                System.out.println("Outcome:      " + m.outcome());
+                                System.out.println("========================\n");
+                            }, () -> System.out.println("Mission not found\n"));
                 }
 
                 case "3" -> {

@@ -38,5 +38,7 @@ public class MissionService {
     }
 
 
-
+    public List<MoonMissionDTO> getAllMissions() {
+        return missionRepository.findAll().stream().map(moonMissionDTOMapper).collect(Collectors.toList());
+    }
 }
