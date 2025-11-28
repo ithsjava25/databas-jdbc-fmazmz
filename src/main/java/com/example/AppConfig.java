@@ -1,6 +1,7 @@
 package com.example;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,20 +25,9 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource() {
-        String url = System.getProperty("APP_JDBC_URL");
-        String user = System.getProperty("APP_DB_USER");
-        String pass =  System.getProperty("APP_DB_PASS");
-
-        if(url == null || url.isBlank()) {
-            throw new IllegalStateException("APP_JDBC_URL must be set");
-        }
-        if(user == null || user.isBlank()) {
-            throw new IllegalStateException("APP_DB_USER must be set");
-        }
-        if(pass == null || pass.isBlank()) {
-            throw new IllegalStateException("APP_DB_PASS must be set");
-        }
-
+        @NotNull String url = System.getProperty("APP_JDBC_URL");
+        @NotNull String user = System.getProperty("APP_DB_USER");
+        @NotNull String pass =  System.getProperty("APP_DB_PASS");
 
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(url);
