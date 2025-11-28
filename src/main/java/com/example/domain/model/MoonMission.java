@@ -10,7 +10,7 @@ public class MoonMission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_id")
-    private Short id;
+    private Integer id;
 
     @Column(name = "spacecraft")
     private String spacecraft;
@@ -41,7 +41,7 @@ public class MoonMission {
         this.outcome = outcome;
     }
 
-    public Short getId() {
+    public Integer getId() {
         return id;
     }
 

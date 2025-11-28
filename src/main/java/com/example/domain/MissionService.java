@@ -25,7 +25,7 @@ public class MissionService {
                 .toList();
     }
 
-    public Optional<MoonMission> getMissionById(Short id) {
+    public Optional<MoonMission> getMissionById(Integer id) {
         return missionRepository.findById(id);
     }
 
