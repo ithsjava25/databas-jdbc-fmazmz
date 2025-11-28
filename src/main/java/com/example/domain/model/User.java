@@ -27,12 +27,11 @@ public class User {
 
 
     public User() {}
-    public User(String name, String password, String firstName, String lastName, String ssn) {
-        this.name = name;
-        this.password = password;
+    public User(String firstName, String lastName, String ssn, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
+        this.password = password;
     }
 
     public Short getUserId() {
