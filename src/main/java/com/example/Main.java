@@ -1,6 +1,9 @@
 package com.example;
 
 import com.example.domain.MissionService;
+import com.example.domain.UserService;
+import com.example.domain.dto.PasswordUpdateRequest;
+import com.example.domain.dto.UserCreationRequest;
 import com.example.domain.dto.UserDTOMapper;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
@@ -47,6 +50,7 @@ public class Main {
                 new AnnotationConfigApplicationContext(AppConfig.class);
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         MissionService missionService = ctx.getBean(MissionService.class);
+        UserService userService = ctx.getBean(UserService.class);
 
         Scanner scanner = new Scanner(System.in);
         Console console = System.console();
@@ -124,11 +128,9 @@ public class Main {
                     System.out.print("Password: ");
                     String pw = scanner.nextLine();
 
-                    User u = new User(fn, ln, ssn, pw);
-                    u.setName(User.makeUserName(u));
-
-                    userRepo.save(u);
-
+                    userService.createUser(new UserCreationRequest(
+                            fn, ln, ssn, pw
+                    ));
                     System.out.println("Account created");
                 }
 
@@ -139,28 +141,18 @@ public class Main {
                     System.out.print("New password: ");
                     String newPassword = scanner.nextLine();
 
-                    Optional<User> userOpt = userRepo.findById(id);
-
-                    if (userOpt.isPresent()) {
-                        User u = userOpt.get();
-                        u.setPassword(newPassword);
-                        userRepo.save(u);
-                        System.out.println("Password updated");
-                    } else {
-                        System.out.println("Account not found");
-                    }
+                    userService.updateUserPassword(new PasswordUpdateRequest(
+                            id, newPassword
+                    ));
+                    System.out.println("Password updated");
                 }
 
                 case "6" -> {
                     System.out.print("User id: ");
                     Integer id = valueOf(scanner.nextLine());
 
-                    if (userRepo.existsById(id)) {
-                        userRepo.deleteById(id);
-                        System.out.println("Account deleted");
-                    } else {
-                        System.out.println("Account not found");
-                    }
+                    userService.deleteUser(id);
+                    System.out.println("User deleted");
                 }
 
                 case "0" -> running = false;
