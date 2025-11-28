@@ -1,13 +1,18 @@
 package com.example;
 
+import com.example.domain.MissionService;
 import com.example.domain.dto.UserDTOMapper;
+import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.Scanner;
 
 public class Main {
 
@@ -39,14 +44,127 @@ public class Main {
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
         UserRepository userRepo = ctx.getBean(UserRepository.class);
-        UserDTOMapper mapper = ctx.getBean(UserDTOMapper.class);
-        //List<UserDTO> list =
-        //        userRepo.findById((short) 1)
-        //                .stream()
-        //                .map(mapper)
-        //                .toList();
+        MissionService missionService = ctx.getBean(MissionService.class);
 
-        //System.out.println(list);
+        Scanner scanner = new Scanner(System.in);
+        Console console = System.console();
+
+        // Login flow (required by tests)
+        System.out.println("username:");
+        String username = scanner.nextLine();
+
+        System.out.println("password:");
+        String password = scanner.nextLine();
+
+        Optional<User> loginUser = userRepo.findByName(username)
+                .filter(u -> u.getPassword().equals(password));
+
+        if (loginUser.isEmpty()) {
+            System.out.println("Invalid username or password");
+            return;
+        }
+
+        boolean running = true;
+
+        User USER = loginUser.get();
+
+        while (running) {
+            System.out.println("-----------------------------------");
+            System.out.println("1) List moon missions");
+            System.out.println("2) Get mission by id");
+            System.out.println("3) Count missions by year");
+            System.out.println("4) Create account");
+            System.out.println("5) Update (logged-in) account password");
+            System.out.println("6) Delete account");
+            System.out.println("0) Exit");
+            System.out.println("-----------------------------------");
+            System.out.print("Choose an option: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+
+                case "1" -> {
+                    missionService.getAllMissionNames()
+                            .forEach(System.out::println);
+                }
+
+                case "2" -> {
+                    System.out.print("Mission id: ");
+                    Short id = Short.valueOf(scanner.nextLine());
+                    missionService.getMissionById(id)
+                            .ifPresentOrElse(
+                                    mission -> System.out.println("Mission: " + mission),
+                                    () -> System.out.println("Mission not found")
+                            );
+                }
+
+                case "3" -> {
+                    System.out.print("Year: ");
+                    int year = Integer.parseInt(scanner.nextLine());
+                    long count = missionService.totalMissionsByYear(year);
+                    System.out.println(count + " missions in " + year);
+                }
+
+                case "4" -> {
+                    System.out.print("First name: ");
+                    String fn = scanner.nextLine();
+
+                    System.out.print("Last name: ");
+                    String ln = scanner.nextLine();
+
+                    System.out.print("SSN: ");
+                    String ssn = scanner.nextLine();
+
+                    System.out.print("Password: ");
+                    String pw = scanner.nextLine();
+
+                    User u = new User(fn, ln, ssn, pw);
+                    u.setName(User.makeUserName(u));
+
+                    userRepo.save(u);
+
+                    System.out.println("Account created");
+                }
+
+                case "5" -> {
+                    Short id = USER.getUserId();
+
+                    System.out.print("New password: ");
+                    String newPassword = scanner.nextLine();
+
+                    Optional<User> userOpt = userRepo.findById(id);
+
+                    if (userOpt.isPresent()) {
+                        User u = userOpt.get();
+                        u.setPassword(newPassword);
+                        userRepo.save(u);
+                        System.out.println("Password updated");
+                    } else {
+                        System.out.println("Account not found");
+                    }
+                }
+
+                case "6" -> {
+                    System.out.print("User id: ");
+                    Short id = Short.valueOf(scanner.nextLine());
+
+                    if (userRepo.existsById(id)) {
+                        userRepo.deleteById(id);
+                        System.out.println("Account deleted");
+                    } else {
+                        System.out.println("Account not found");
+                    }
+                }
+
+                case "0" -> running = false;
+
+                default -> System.out.println("Invalid option");
+            }
+        }
+
+        ctx.close();
+
     }
 
     /**
