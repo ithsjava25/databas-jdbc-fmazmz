@@ -8,7 +8,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private short userId;
+    private Short userId;
 
     @Column(name = "name")
     private String name;
@@ -35,7 +35,7 @@ public class User {
         this.ssn = ssn;
     }
 
-    public short getUserId() {
+    public Short getUserId() {
         return userId;
     }
 
