@@ -25,10 +25,15 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource() {
-        @NotNull String url = System.getProperty("APP_JDBC_URL");
-        @NotNull String user = System.getProperty("APP_DB_USER");
-        @NotNull String pass =  System.getProperty("APP_DB_PASS");
+        String url = System.getProperty("APP_JDBC_URL");
+        String user = System.getProperty("APP_DB_USER");
+        String pass =  System.getProperty("APP_DB_PASS");
 
+        if (url == null || user == null || pass == null) {
+            throw new IllegalStateException(
+                    "Missing DB configuration. Provide APP_JDBC_URL, APP_DB_USER, APP_DB_PASS as system properties."
+            );
+        }
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(url);
         dataSource.setUsername(user);
