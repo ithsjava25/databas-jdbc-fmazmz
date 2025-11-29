@@ -4,6 +4,8 @@ import com.example.domain.dto.MoonMissionDTO;
 import com.example.domain.model.MoonMission;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,26 +15,38 @@ import java.util.List;
 @Repository
 public class MissionJdbcRepository {
 
+    private final DataSource dataSource;
+
+    public MissionJdbcRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+
     public List<MoonMission> findAll() {
-        String sql = "select * from moon_mission";
+        String sql = "SELECT * FROM moon_mission";
+
         List<MoonMission> missions = new ArrayList<>();
 
-        try (PreparedStatement statement = ConnectionManager.getConnection().prepareStatement(sql)) {
-            ResultSet results =  statement.executeQuery();
-            while (results.next()) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
                 missions.add(new MoonMission(
-                        results.getInt("mission_id"),
-                        results.getString("spacecraft"),
-                        results.getDate("launch_date").toLocalDate(),
-                        results.getString("carrier_rocket"),
-                        results.getString("operator"),
-                        results.getString("mission_type"),
-                        results.getString("outcome")
+                        rs.getInt("mission_id"),
+                        rs.getString("spacecraft"),
+                        rs.getDate("launch_date").toLocalDate(),
+                        rs.getString("carrier_rocket"),
+                        rs.getString("operator"),
+                        rs.getString("mission_type"),
+                        rs.getString("outcome")
                 ));
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } ;
+            throw new RuntimeException("Failed to fetch missions", e);
+        }
+
         return missions;
     }
 }

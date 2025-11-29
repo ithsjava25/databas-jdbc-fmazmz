@@ -9,18 +9,18 @@ import java.util.List;
 @Service
 public class MissionJdbcService {
 
-    private final MissionJdbcRepository missionJdbcRepository;
-    private final MoonMissionDTOMapper moonMissionDTOMapper;
+    private final MissionJdbcRepository repo;
+    private final MoonMissionDTOMapper DTOmapper;
 
     public MissionJdbcService(MissionJdbcRepository missionJdbcRepository, MoonMissionDTOMapper moonMissionDTOMapper) {
-        this.missionJdbcRepository = missionJdbcRepository;
-        this.moonMissionDTOMapper = moonMissionDTOMapper;
+        this.repo = missionJdbcRepository;
+        this.DTOmapper = moonMissionDTOMapper;
     }
 
 
     public List<MoonMissionDTO> getAllMissions() {
-        return missionJdbcRepository.findAll()
-                .stream().map(moonMissionDTOMapper)
+        return repo.findAll()
+                .stream().map(DTOmapper)
                 .toList();
     }
 

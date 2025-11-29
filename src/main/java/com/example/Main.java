@@ -4,20 +4,13 @@ import com.example.domain.MissionService;
 import com.example.domain.UserService;
 import com.example.domain.dto.PasswordUpdateRequest;
 import com.example.domain.dto.UserCreationRequest;
-import com.example.domain.dto.UserDTOMapper;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
-import com.example.jdbc.ConnectionManager;
 import com.example.jdbc.MissionJdbcService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.Console;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
@@ -45,9 +38,6 @@ public class Main {
                             "as system properties (-Dkey=value) or environment variables.");
         }
 
-        // Singleton ConnectionManager
-        ConnectionManager.init(jdbcUrl, dbUser, dbPass);
-
         // Start Spring application and get Spring beans
         ConfigurableApplicationContext ctx = SpringApplication.run(AppConfig.class);
         UserRepository userRepo = ctx.getBean(UserRepository.class);
@@ -57,8 +47,8 @@ public class Main {
 
         // @kappsegla
         // Example JDBC implementation for MoonMissions (for learning and for requirement purposes)
-        // MissionJdbcService missionJdbcService = ctx.getBean(MissionJdbcService.class);
-        // System.out.println(missionJdbcService.getAllMissions());
+        //MissionJdbcService missionJdbcService = ctx.getBean(MissionJdbcService.class);
+        //System.out.println(missionJdbcService.getAllMissions());
 
 
         Scanner scanner = new Scanner(System.in);
