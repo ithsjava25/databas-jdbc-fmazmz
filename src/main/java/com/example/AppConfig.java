@@ -20,6 +20,7 @@ import java.util.Map;
 @EnableJpaRepositories(basePackages = "com.example.domain.repository")
 @EntityScan(basePackages = "com.example.domain.model")
 @ComponentScan(basePackages = "com.example.domain")
+@ComponentScan(basePackages = "com.example.jdbc")
 @EnableTransactionManagement
 public class AppConfig {
 

@@ -41,6 +41,16 @@ public class MoonMission {
         this.outcome = outcome;
     }
 
+    public MoonMission(Integer id, String spacecraft, LocalDate launchDate, String carrierRocket, String operator, String missionType, String outcome) {
+        this.id = id;
+        this.spacecraft = spacecraft;
+        this.launchDate = launchDate;
+        this.carrierRocket = carrierRocket;
+        this.operator = operator;
+        this.missionType = missionType;
+        this.outcome = outcome;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -7,6 +7,8 @@ import com.example.domain.dto.UserCreationRequest;
 import com.example.domain.dto.UserDTOMapper;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
+import com.example.jdbc.ConnectionManager;
+import com.example.jdbc.MissionJdbcService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -43,17 +45,21 @@ public class Main {
                             "as system properties (-Dkey=value) or environment variables.");
         }
 
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPass)) {
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //Todo: Starting point for your code
-        ConfigurableApplicationContext ctx =
-                SpringApplication.run(AppConfig.class);
+        // Singleton ConnectionManager
+        ConnectionManager.init(jdbcUrl, dbUser, dbPass);
+
+        // Start Spring application and get Spring beans
+        ConfigurableApplicationContext ctx = SpringApplication.run(AppConfig.class);
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         MissionService missionService = ctx.getBean(MissionService.class);
         UserService userService = ctx.getBean(UserService.class);
         PasswordEncoder passwordEncoder = ctx.getBean(PasswordEncoder.class);
+
+        // @kappsegla
+        // Example JDBC implementation for MoonMissions (for learning and for requirement purposes)
+        // MissionJdbcService missionJdbcService = ctx.getBean(MissionJdbcService.class);
+        // System.out.println(missionJdbcService.getAllMissions());
+
 
         Scanner scanner = new Scanner(System.in);
 
