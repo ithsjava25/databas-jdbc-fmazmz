@@ -1,6 +1,5 @@
 package com.example.jdbc;
 
-import com.example.domain.dto.MoonMissionDTO;
 import com.example.domain.model.MoonMission;
 import org.springframework.stereotype.Repository;
 
