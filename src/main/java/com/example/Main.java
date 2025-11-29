@@ -7,6 +7,8 @@ import com.example.domain.dto.UserCreationRequest;
 import com.example.domain.dto.UserDTOMapper;
 import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -46,8 +48,8 @@ public class Main {
             throw new RuntimeException(e);
         }
         //Todo: Starting point for your code
-        AnnotationConfigApplicationContext ctx =
-                new AnnotationConfigApplicationContext(AppConfig.class);
+        ConfigurableApplicationContext ctx =
+                SpringApplication.run(AppConfig.class);
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         MissionService missionService = ctx.getBean(MissionService.class);
         UserService userService = ctx.getBean(UserService.class);

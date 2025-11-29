@@ -1,6 +1,9 @@
 package com.example;
 
 import org.junit.jupiter.api.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -35,6 +38,8 @@ import static org.assertj.core.api.Assertions.fail;
 @Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CliAppIT {
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Container
     private static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.5.0")
@@ -148,6 +153,7 @@ public class CliAppIT {
     void updateAccountPassword_thenRowIsUpdated_andPrintsConfirmation() throws Exception {
         // Prepare: insert a minimal account row directly
         long userId = insertAccount("Test", "User", "111111-1111", "oldpass");
+        String newPassword = "newpass123";
 
         String input = String.join(System.lineSeparator(),
                 // login first
@@ -155,7 +161,7 @@ public class CliAppIT {
                 "MB=V4cbAqPz4vqmQ",
                 "5",                 // update password (menu option 5 after reordering)
                 Long.toString(userId),// user_id
-                "newpass123",        // new password
+                newPassword,        // new password
                 "0"                  // exit
         ) + System.lineSeparator();
 
@@ -165,7 +171,8 @@ public class CliAppIT {
                 .containsIgnoringCase("updated");
 
         String stored = readPassword(userId);
-        assertThat(stored).isEqualTo("newpass123");
+        assertThat(passwordEncoder.matches(newPassword, stored)).isTrue();
+
     }
 
     @Test
