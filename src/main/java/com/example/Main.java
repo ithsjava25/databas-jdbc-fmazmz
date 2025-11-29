@@ -51,9 +51,9 @@ public class Main {
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         MissionService missionService = ctx.getBean(MissionService.class);
         UserService userService = ctx.getBean(UserService.class);
+        PasswordEncoder passwordEncoder = ctx.getBean(PasswordEncoder.class);
 
         Scanner scanner = new Scanner(System.in);
-        Console console = System.console();
 
         // Login flow (required by tests)
         System.out.println("username:");
@@ -63,7 +63,7 @@ public class Main {
         String password = scanner.nextLine();
 
         Optional<User> loginUser = userRepo.findByName(username)
-                .filter(u -> u.getPassword().equals(password));
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
 
         if (loginUser.isEmpty()) {
             System.out.println("Invalid username or password");

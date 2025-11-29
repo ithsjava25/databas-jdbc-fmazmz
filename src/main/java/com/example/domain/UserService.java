@@ -6,6 +6,7 @@ import com.example.domain.model.User;
 import com.example.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,10 +15,12 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo,  PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void createUser(UserCreationRequest req) {
@@ -25,7 +28,7 @@ public class UserService {
                 req.firstName(),
                 req.lastName(),
                 req.ssn(),
-                req.password()
+                passwordEncoder.encode(req.password())
         );
 
         user.setName(User.makeUserName(user));
@@ -33,12 +36,11 @@ public class UserService {
     }
 
     public void deleteUser(Integer userId) {
-        Optional<User> user = userRepo.findById(userId);
-        if (user.isEmpty()) {
-            System.out.println("User not found");
-            return;
-        }
-        userRepo.delete(user.get());
+        userRepo.findById(userId)
+                .ifPresentOrElse(
+                        userRepo::delete,
+                        () -> System.out.println("User not found")
+                );
     }
 
     @Transactional
@@ -48,7 +50,8 @@ public class UserService {
             System.out.println("User not found");
             return;
         }
-        user.get().setPassword(req.password());
+
+        user.get().setPassword(passwordEncoder.encode(req.password()));
         userRepo.save(user.get());
     }
 }
