@@ -55,6 +55,10 @@ public class User {
         return name;
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public String getPassword() {
         return password;
     }
