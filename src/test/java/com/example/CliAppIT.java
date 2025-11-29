@@ -1,6 +1,9 @@
 package com.example;
 
 import org.junit.jupiter.api.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -35,6 +38,8 @@ import static org.assertj.core.api.Assertions.fail;
 @Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CliAppIT {
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Container
     private static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.5.0")
@@ -78,7 +83,7 @@ public class CliAppIT {
     @Test
     @Order(2)
     void login_withValidCredentials_thenCanUseApplication() throws Exception {
-        // Using a known seeded account from init.sql:
+        // Using a known seeded account from init_postgres.sql:
         // first_name = Angela, last_name = Fransson -> username (name column) = AngFra
         // password = MB=V4cbAqPz4vqmQ
         String input = String.join(System.lineSeparator(),
@@ -148,6 +153,7 @@ public class CliAppIT {
     void updateAccountPassword_thenRowIsUpdated_andPrintsConfirmation() throws Exception {
         // Prepare: insert a minimal account row directly
         long userId = insertAccount("Test", "User", "111111-1111", "oldpass");
+        String newPassword = "newpass123";
 
         String input = String.join(System.lineSeparator(),
                 // login first
@@ -155,7 +161,7 @@ public class CliAppIT {
                 "MB=V4cbAqPz4vqmQ",
                 "5",                 // update password (menu option 5 after reordering)
                 Long.toString(userId),// user_id
-                "newpass123",        // new password
+                newPassword,        // new password
                 "0"                  // exit
         ) + System.lineSeparator();
 
@@ -165,7 +171,8 @@ public class CliAppIT {
                 .containsIgnoringCase("updated");
 
         String stored = readPassword(userId);
-        assertThat(stored).isEqualTo("newpass123");
+        assertThat(passwordEncoder.matches(newPassword, stored)).isTrue();
+
     }
 
     @Test
@@ -193,7 +200,7 @@ public class CliAppIT {
     @Test
     @Order(4)
     void getMoonMissionById_printsDetails() throws Exception {
-        // Arrange: use a known mission id from seed data (see init.sql)
+        // Arrange: use a known mission id from seed data (see init_postgres.sql)
         // Insert order defines auto-increment ids; 'Luna 3' is the 5th insert -> mission_id = 5
         long missionId = 5L;
 
@@ -219,7 +226,7 @@ public class CliAppIT {
     @Order(5)
     void countMoonMissionsForYear_printsTotal() throws Exception {
         int year = 2019; // Seed data contains several missions in 2019
-        int expected = 3; // From init.sql: Beresheet, Chandrayaan-2, TESS
+        int expected = 3; // From init_postgres.sql: Beresheet, Chandrayaan-2, TESS
 
         String input = String.join(System.lineSeparator(),
                 // login first
